@@ -112,6 +112,13 @@ define(function (require, exports, module) {
       view = new View({
         assertionLibrary,
         broker,
+        createView: function (Constructor, options) {
+          const viewOptions = Object.create(options);
+          viewOptions.formPrefill = formPrefill;
+          viewOptions.metrics = metrics;
+          viewOptions.notifier = notifier;
+          return new Constructor(viewOptions);
+        },
         experimentGroupingRules,
         formPrefill,
         fxaClient,

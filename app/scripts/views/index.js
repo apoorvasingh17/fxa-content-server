@@ -16,7 +16,9 @@ define(function (require, exports, module) {
   module.exports = BaseView.extend({
     beforeRender () {
       let url;
-      if (this.user.getSignedInAccount().get('sessionToken')) {
+      if (this.relier.get('email')) {
+        url = 'email';
+      } else if (this.user.getSignedInAccount().get('sessionToken')) {
         url = 'settings';
       } else {
         url = 'signup';

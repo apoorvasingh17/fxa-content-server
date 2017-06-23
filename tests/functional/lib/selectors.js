@@ -49,6 +49,12 @@ define([], function () {
       SET_PRIMARY_EMAIL_BUTTON: '.email-address .set-primary',
       VERIFIED_LABEL: '.verified'
     },
+    ENTER_EMAIL: {
+      EMAIL: 'input[type=email]',
+      HEADER: '#fxa-enter-email-header',
+      SUBMIT: 'button[type="submit"]',
+      SUB_HEADER: '#fxa-enter-email-header .service',
+    },
     FORCE_AUTH: {
       EMAIL: 'input[type=email]',
       HEADER: '#fxa-force-auth-header'
@@ -73,6 +79,13 @@ define([], function () {
     SIGNIN_COMPLETE: {
       HEADER: '#fxa-sign-in-complete-header'
     },
+    SIGNIN_PASSWORD: {
+      EMAIL: 'input[type=email]',
+      EMAIL_NOT_EDITABLE: 'input[type=email][disabled]',
+      HEADER: '#fxa-signin-password-header',
+      PASSWORD: 'input[type=password]',
+      SUBMIT: 'button[type="submit"]',
+    },
     SIGNIN_UNBLOCK: {
       EMAIL_FIELD: '.verification-email-message',
       HEADER: '#fxa-signin-unblock-header'
@@ -92,6 +105,15 @@ define([], function () {
     },
     SIGNUP_COMPLETE: {
       HEADER: '#fxa-sign-up-complete-header'
+    },
+    SIGNUP_PASSWORD: {
+      AGE: '#age',
+      EMAIL: 'input[type=email]',
+      EMAIL_NOT_EDITABLE: 'input[type=email][disabled]',
+      HEADER: '#fxa-signup-password-header',
+      PASSWORD: '#password',
+      SUBMIT: 'button[type="submit"]',
+      VPASSWORD: '#vpassword',
     },
     SMS_LEARN_MORE: {
       HEADER: '#websites-notice'

@@ -26,6 +26,7 @@ define(function (require, exports, module) {
   const CookiesDisabledView = require('../views/cookies_disabled');
   const DeleteAccountView = require('../views/settings/delete_account');
   const DisplayNameView = require('../views/settings/display_name');
+  const EmailView = require('../views/email');
   const EmailsView = require('../views/settings/emails');
   const ForceAuthView = require('../views/force_auth');
   const IndexView = require('../views/index');
@@ -37,10 +38,12 @@ define(function (require, exports, module) {
   const ReportSignInView = require('views/report_sign_in');
   const ResetPasswordView = require('../views/reset_password');
   const SettingsView = require('../views/settings');
+  const SignInPasswordView = require('../views/sign_in_password');
   const SignInReportedView = require('views/sign_in_reported');
   const SignInUnblockView = require('../views/sign_in_unblock');
   const SignInView = require('../views/sign_in');
   const SignUpView = require('../views/sign_up');
+  const SignUpPasswordView = require('../views/sign_up_password');
   const SmsSendView = require('../views/sms_send');
   const SmsSentView = require('../views/sms_sent');
   const Storage = require('./storage');
@@ -78,6 +81,7 @@ define(function (require, exports, module) {
       'connect_another_device(/)': createViewHandler(ConnectAnotherDeviceView),
       'connect_another_device/why(/)': createChildViewHandler(WhyConnectAnotherDeviceView, ConnectAnotherDeviceView),
       'cookies_disabled(/)': createViewHandler(CookiesDisabledView),
+      'email(/)': createViewHandler(EmailView),
       'force_auth(/)': createViewHandler(ForceAuthView),
       'legal(/)': createViewHandler(LegalView),
       'legal/privacy(/)': createViewHandler(PpView),
@@ -103,12 +107,14 @@ define(function (require, exports, module) {
       'settings/display_name(/)': createChildViewHandler(DisplayNameView, SettingsView),
       'settings/emails(/)': createChildViewHandler(EmailsView, SettingsView),
       'signin(/)': createViewHandler(SignInView),
+      'signin/password(/)': createViewHandler(SignInPasswordView),
       'signin_confirmed(/)': createViewHandler(ReadyView, { type: VerificationReasons.SIGN_IN }),
       'signin_permissions(/)': createViewHandler(PermissionsView, { type: VerificationReasons.SIGN_IN }),
       'signin_reported(/)': createViewHandler(SignInReportedView),
       'signin_unblock(/)': createViewHandler(SignInUnblockView),
       'signin_verified(/)': createViewHandler(ReadyView, { type: VerificationReasons.SIGN_IN }),
       'signup(/)': createViewHandler(SignUpView),
+      'signup/password(/)': createViewHandler(SignUpPasswordView),
       'signup_confirmed(/)': createViewHandler(ReadyView, { type: VerificationReasons.SIGN_UP }),
       'signup_permissions(/)': createViewHandler(PermissionsView, { type: VerificationReasons.SIGN_UP }),
       'signup_verified(/)': createViewHandler(ReadyView, { type: VerificationReasons.SIGN_UP }),

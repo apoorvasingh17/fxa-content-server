@@ -62,6 +62,7 @@ define(function (require, exports, module) {
     afterRender () {
       const autofocusEl = this._selectAutoFocusEl();
       this.$(autofocusEl).attr('autofocus', 'autofocus');
+      this.logViewEvent(`password-confirm.visible.${this._isPasswordConfirmEnabled()}`);
 
       return proto.afterRender.call(this);
     },
@@ -119,11 +120,16 @@ define(function (require, exports, module) {
         isCustomizeSyncChecked: relier.isCustomizeSyncChecked(),
         isSignInEnabled: ! forceEmail,
         isSync: isSync,
-        isSyncMigration: this.isSyncMigration()
+        isSyncMigration: this.isSyncMigration(),
+        showPasswordConfirm: this._isPasswordConfirmEnabled()
       });
     },
 
     isValidEnd () {
+      if (! this._doPasswordsMatch()) {
+        return false;
+      }
+
       if (this._isEmailSameAsBouncedEmail()) {
         return false;
       }
@@ -139,7 +145,10 @@ define(function (require, exports, module) {
     },
 
     showValidationErrorsEnd () {
-      if (this._isEmailSameAsBouncedEmail()) {
+      if (! this._doPasswordsMatch()) {
+        this.showValidationError('#password',
+                AuthErrors.toError('PASSWORDS_DO_NOT_MATCH'));
+      } else if (this._isEmailSameAsBouncedEmail()) {
         this.showValidationError('input[type=email]',
                 AuthErrors.toError('DIFFERENT_EMAIL_REQUIRED'));
       } else if (this._isEmailFirefoxDomain()) {
@@ -168,7 +177,7 @@ define(function (require, exports, module) {
        */
       return p().then(() => {
         var account = this._initAccount();
-        var password = this.getElementValue('.password');
+        var password = this.getElementValue('#password');
 
         if (this.isUserOldEnough()) {
           // User filled out COPPA, attempt a signup.
@@ -275,6 +284,22 @@ define(function (require, exports, module) {
       // "@firefox" or "@firefox.com" email addresses are not valid
       // at this time, therefore block the attempt.
       return /@firefox(\.com)?$/.test(email);
+    },
+
+    _passwordConfirmExperiment: undefined,
+    _isPasswordConfirmEnabled () {
+      if (this._passwordConfirmExperiment === undefined) {
+        this._passwordConfirmExperiment = !! this.isInExperiment('signupPasswordConfirm');
+      }
+      return this._passwordConfirmExperiment;
+    },
+
+    _doPasswordsMatch() {
+      if (this._isPasswordConfirmEnabled()) {
+        return this.getElementValue('#password') !== this.getElementValue('#vpassword');
+      } else {
+        return true;
+      }
     },
 
     _initAccount () {

@@ -1217,7 +1217,27 @@ define([
           return type('input[type=email]', email).call(this);
         }
       })
-      .then(type('input[type=password]', password))
+      .then(type('#password', password))
+      .then(() => {
+        // vpassword existing depends on being in an Experiment
+        // so if it doesn't exist, no big deal, carry on.
+        return this.parent
+          .setFindTimeout(0)
+          .findByCssSelector('#vpassword')
+          .then(
+            type('#vpassword', password),
+            (err) => {
+              if (/NoSuchElement/.test(String(err))) {
+                // swallow the error
+                return;
+              }
+
+              throw err;
+            }
+          )
+          .end()
+          .setFindTimeout(intern.config.pageLoadTimeout);
+      })
       .then(type('#age', age || '24'))
 
       .then(function () {

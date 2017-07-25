@@ -42,9 +42,14 @@ define(function (require, exports, module) {
     var user;
     var view;
 
-    function fillOutSignUp(email, password) {
+    function fillOutSignUp(email, password, passwordConfirm) {
       view.$('[type=email]').val(email);
-      view.$('[type=password]').val(password);
+      view.$('#password').val(password);
+
+      if (arguments.length < 3) {
+        passwordConfirm = password;
+      }
+      view.$('#vpassword').val(passwordConfirm);
 
       view.enableSubmitIfValid();
     }
@@ -226,6 +231,32 @@ define(function (require, exports, module) {
             .then(function () {
               assert.isTrue(experimentGroupingRules.choose.calledWith('communicationPrefsVisible'));
               assert.equal(view.$('#marketing-email-optin').length, 0);
+            });
+        });
+      });
+
+      describe('password confirm', function() {
+        it('is visible if enabled', function () {
+          sinon.stub(experimentGroupingRules, 'choose', function () {
+            return true;
+          });
+
+          return view.render()
+            .then(function () {
+              assert.isTrue(experimentGroupingRules.choose.calledWith('signupPasswordConfirm'));
+              assert.equal(view.$('#vpassword').length, 1);
+            });
+        });
+
+        it('is not visible if disabled', function () {
+          sinon.stub(experimentGroupingRules, 'choose', function () {
+            return false;
+          });
+
+          return view.render()
+            .then(function () {
+              assert.isTrue(experimentGroupingRules.choose.calledWith('signupPasswordConfirm'));
+              assert.equal(view.$('#vpassword').length, 0);
             });
         });
       });
@@ -454,6 +485,25 @@ define(function (require, exports, module) {
 
       it('returns true if COPPA view returns false', function () {
         fillOutSignUp(email, 'password');
+        assert.isTrue(view.isValid());
+      });
+
+      it('returns false if confirm password is empty', function () {
+        view._passwordConfirmExperiment = true;
+        fillOutSignUp(email, 'password', '');
+        assert.isFalse(view.isValid());
+      });
+
+      it('returns false if confirm password does not match', function () {
+        view._passwordConfirmExperiment = true;
+        fillOutSignUp(email, 'password', 'drowssap');
+        assert.isFalse(view.isValid());
+      });
+
+
+      it('returns true if confirm password matches', function () {
+        view._passwordConfirmExperiment = true;
+        fillOutSignUp(email, 'password', 'password');
         assert.isTrue(view.isValid());
       });
     });

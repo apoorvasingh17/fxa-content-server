@@ -17,7 +17,8 @@ define((require, exports, module) => {
     require('./send-sms-enabled-for-country'),
     require('./send-sms-install-link'),
     require('./sentry'),
-    require('./sessions')
+    require('./sessions'),
+    require('./signup-password-confirm')
   ];
 
   module.exports = class ExperimentChoiceIndex {
